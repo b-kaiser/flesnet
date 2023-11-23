@@ -4,7 +4,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
-  image: ubuntu:18.04
+  image: ubuntu:22.04
   before_script:
     - apt update
     - apt upgrade -y
