@@ -33,10 +33,13 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update -y
-        sudo apt-get install -yq catch doxygen libboost-all-dev libfabric-dev libibverbs-dev libkmod-dev libnuma-dev libpci-dev librdmacm-dev libtool-bin ninja-build
+        sudo apt-get install -yq libboost-dev libboost-iostreams-dev libboost-log-dev libboost-program-options-dev libboost-regex-dev libboost-serialization-dev libboost-system-dev libboost-test-dev libboost-thread-dev libfabric-dev libibverbs-dev libnuma-dev librdmacm-dev libgnutls28-dev ninja-build
+        sudo apt-get install -yq libkmod-dev libpci-dev libtool-bin
 
     - name: Install additional dependencies
-      run: contrib/merge-dependencies
+      run: |
+        wget https://github.com/cbm-fles/pda/releases/download/11.6.7/libpda4_11.6.7-1_amd64.deb
+        sudo dpkg -i libpda4_*_amd64.deb
 
     - name: Create build environment
       run: cmake -E make_directory ${{runner.workspace}}/build
@@ -53,13 +56,12 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       run: CTEST_OUTPUT_ON_FAILURE=1 ninja test
 
-#    - name: Create .deb package
-#      working-directory: ${{runner.workspace}}/build
-#      run: cpack
+    - name: Create .deb package
+      working-directory: ${{runner.workspace}}/build
+      run: cpack
 
-#    - name: Archive .deb package
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: flesnet
-#        path: ${{runner.workspace}}/build/*.deb
-  
+    - name: Archive .deb package
+      uses: actions/upload-artifact@v3
+      with:
+        name: flesnet-${{matrix.cc}}
+        path: ${{runner.workspace}}/build/*.deb
