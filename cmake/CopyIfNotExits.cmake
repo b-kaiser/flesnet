@@ -1,4 +1,4 @@
-# Copies files if the don't exist in destination.
+# Copies files if they don't exist in destination.
 # Warns if source files are newer than destination files.
 
 IF (NOT EXISTS ${CP_DEST})
