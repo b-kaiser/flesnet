@@ -1,13 +1,55 @@
 #!/bin/bash
 
-echo "This script is deprecated. Please install the PDA library using Debian packages."
-exit 1
-
 set -e
 set -u
 
 PDA_VERSION="11.6.7"
+PDA_KERNEL_VERSION="0.9.0"
 USER_NAME=`id -u -n`
+
+install_kernel()
+{
+  cd /tmp
+  wget https://github.com/cbm-fles/pda/releases/download/$1/pda-kernel-dkms_$2-1_amd64.deb
+  apt-get install ./pda-kernel-dkms_$2-1_amd64.deb
+}
+
+install_lib()
+{
+  cd /tmp
+  wget https://github.com/cbm-fles/pda/releases/download/$1/libpda4_$1-1_amd64.deb
+  apt-get install ./libpda4_$1-1_amd64.deb
+}
+
+check_old_install()
+{
+  echo "Checking for old PDA installation"
+  ret=0
+  if dkms_status=$(/usr/sbin/dkms status | grep uio_pci_dma); then
+    ret=1
+    echo -e "\nPlease remove the following modules from dkms:"
+    echo "$dkms_status"
+  fi
+  if pda_status=$(ls -d /opt/pda/* 2> /dev/null); then
+    ret=1
+    echo -e "\nPlease remove the following libpda installations:"
+    echo "$pda_status"
+  fi
+  if grep -q uio_pci_dma /etc/modules; then
+    ret=1
+    echo -e "\nPlease remove 'uio_pci_dma' from '/etc/modules'"
+  fi
+  if ls /etc/udev/rules.d/99-pda.rules &> /dev/null; then
+    ret=1
+    echo -e "\nPlease remove '/etc/udev/rules.d/99-pda.rules'"
+  fi
+  if [ $ret != 0 ]; then
+    echo "Please clean old installation before proceeding."
+    exit $ret
+  fi
+}
+
+# Default install is done via Debian packages. Functions below are kept for reference.
 
 getdeps()
 {
@@ -74,14 +116,9 @@ if [ "root" = "$USER_NAME" ]
 then
     echo "Now running as $USER_NAME"
 
-    getdeps
-    clean_old_install
-    add_systemgroup
-    install $PDA_VERSION
-    patchmodulelist
-    reload_udev
-
-    echo -e "Please add all intended flib users to group 'pda', e.g., 'usermod -a -G pda <user>'"
+    check_old_install
+    install_kernel $PDA_VERSION $PDA_KERNEL_VERSION
+    install_lib $PDA_VERSION
 else
     echo "Running as user!"
     sudo $0
