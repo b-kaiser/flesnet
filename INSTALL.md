@@ -28,24 +28,20 @@ branch:
 Build Dependencies
 ------------------
 
-The following commands prepare a Ubuntu 18.04 system for flesnet
+The following commands prepare a Ubuntu 22.04 system for flesnet
 compilation. For other distributions, please proceed accordingly.
-
-    sudo bash -c "echo 'deb https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_18.04/ ./' > /etc/apt/sources.list.d/zmq.list"
-
-    wget https://build.opensuse.org/projects/network:messaging:zeromq:release-draft/public_key -O- | sudo apt-key add
-
-    sudo bash -c "echo -e 'Package: libzmq3-dev\nPin: origin download.opensuse.org\nPin-Priority: 1000\n\nPackage: libzmq5\nPin: origin download.opensuse.org\nPin-Priority: 1000' >> /etc/apt/preferences"
 
     sudo apt-get update -y
 
-    sudo apt-get install -yq cmake catch doxygen libboost-all-dev \
+    sudo apt-get install -yq libfmt-dev git build-essential cmake catch doxygen libboost-all-dev \
       libfabric-dev libibverbs-dev libkmod-dev \
       libnuma-dev libpci-dev librdmacm-dev libtool-bin libssl-dev libzmq3-dev
 
 Note: Flesnet currently requires a version of the ZeroMQ library
-compiled with "draft" API. The easiest way to install this dependency
-is from the zmq build server as shown above.
+compiled with "draft" API. It is assumed that ZeroMQ is currently not
+installed on your system, and the above command will clone the ZeroMQ
+repository and build a compatible version from source.  If ZeroMQ an
+incompatible version is installed on your system, then ...
 
 Note: The minimum required Boost version is 1.65. If you have the
 choice between different Boost versions and plan to record data it is
