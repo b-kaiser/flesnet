@@ -17,7 +17,7 @@ namespace fles {
  * following types:
  * - TimesliceInputArchive
  * - TimesliceInputArchiveSequence
- * - TimesliceSubsciber
+ * - TimesliceSubscriber
  *
  * If there is more than one TimesliceSource object, these objects are handed
  * over to an instance of the MergingSource class, which internally merges data

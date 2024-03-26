@@ -1,7 +1,7 @@
 # Flesnet Timeslice Source Identifier
 (2021-12-13, by Jan de Cuveland)
 
-A timeslice source can be identifed by a UTF8 string that resembles a URI:
+A timeslice source can be identified by a UTF8 string that resembles a URI:
 ```
 scheme://path?param1=value1&param2=value2
 ```
@@ -17,7 +17,7 @@ Currently implemented schemes:
 `tcp`
 : Receive timeslices via tcp network connection
 
-Some Flesnet tools/classes support additional (legacy) adressing schemes.
+Some Flesnet tools/classes support additional (legacy) addressing schemes.
 
 ## The `shm` scheme
 Receive timeslice via a local shared memory.
@@ -27,7 +27,7 @@ Example: shm://identifier
 
 Via the shared memory interface, the receivers can access the timeslice data in the computer's main memory without additional duplication or transmission.
 
-The `identifer` selects a shared memory interface on the node. This has to match the `identifier` used by the Flesnet timeslice builder.
+The `identifier` selects a shared memory interface on the node. This has to match the `identifier` used by the Flesnet timeslice builder.
 
 The parameters allow for a more detailed specification of the requested timeslices.
 
