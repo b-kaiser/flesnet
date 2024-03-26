@@ -65,16 +65,21 @@ namespace fles {
  *    `"?"` wildcard expands to more than one instance)
  * 6. A MergingSource containing two TimesliceInputArchive objects
  * 7. A single TimesliceInputArchiveSequence
-
  */
 class TimesliceAutoSource : public TimesliceSource {
 public:
   /**
-   * \brief Construct a TimesliceAutoSource object and initialize the
-   * actual source class(es).
+   * \class TimesliceAutoSource
+   * \brief Constructs a TimesliceAutoSource object from a semicolon separated
+   * string of URIs of input sources.
+   *
+   * Initializes the actual source class(es). If parsing the argument fails, a
+   * runtime error is thrown.
    *
    * \param locator The address of the input source(s) to read data from as a
-   * string. Semicolon (";") characters in the string are treated as separators.
+   * string. Semicolon (";") characters in the string are treated as separators
+   * and after splitting the string, each component is parsed as an UriComponents
+   * object.
    */
   TimesliceAutoSource(const std::string& locator);
 
